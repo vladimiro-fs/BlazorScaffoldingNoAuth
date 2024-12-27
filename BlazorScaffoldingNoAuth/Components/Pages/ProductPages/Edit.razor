@@ -42,9 +42,19 @@ else
                     <InputNumber id="price" @bind-Value="Product.Price" class="form-control" />
                     <ValidationMessage For="() => Product.Price" class="text-danger" />
                 </div>
-                <div class="mb-3">
+                @*  <div class="mb-3">
                     <label for="categoryid" class="form-label">CategoryId:</label>
                     <InputNumber id="categoryid" @bind-Value="Product.CategoryId" class="form-control" />
+                    <ValidationMessage For="() => Product.CategoryId" class="text-danger" />
+                </div> *@
+                <div class="mb-3">
+                    <label for="categoryid" class="form-label">Category:</label>
+                    <select id="categoryid" class="form-control" @bind="Product.CategoryId">
+                        @foreach (var category in categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
                     <ValidationMessage For="() => Product.CategoryId" class="text-danger" />
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
@@ -64,10 +74,13 @@ else
     [SupplyParameterFromForm]
     private Product? Product { get; set; }
 
+    public List<Category> categories { get; set; } = new List<Category>();
+
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
         Product ??= await context.Product.FirstOrDefaultAsync(m => m.Id == Id);
+        categories = await context.Category.ToListAsync();
 
         if (Product is null)
         {

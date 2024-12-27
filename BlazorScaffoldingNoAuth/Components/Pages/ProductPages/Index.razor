@@ -14,12 +14,12 @@
     <a href="products/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="context.Product">
+<QuickGrid Class="table" Items="context.Product.Include(p => p.Category)">
     <PropertyColumn Property="product => product.Name" />
     <PropertyColumn Property="product => product.Description" />
     <PropertyColumn Property="product => product.ImageUrl" />
     <PropertyColumn Property="product => product.Price" />
-    <PropertyColumn Property="product => product.CategoryId" />
+    <PropertyColumn Property="product => product.Category.Name" />
 
     <TemplateColumn Context="product">
         <a href="@($"products/edit?id={product.Id}")">Edit</a> |

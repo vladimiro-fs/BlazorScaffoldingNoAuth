@@ -14,15 +14,26 @@
     <a href="categories/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="context.Category">
-    <PropertyColumn Property="category => category.Name" />
+<div class="card-container">
+    <div class="row">
+        @foreach (var category in context.Category)
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p>@category.Name</p>
 
-    <TemplateColumn Context="category">
-        <a href="@($"categories/edit?id={category.Id}")">Edit</a> |
-        <a href="@($"categories/details?id={category.Id}")">Details</a> |
-        <a href="@($"categories/delete?id={category.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+                        <div class="card-actions">
+                            <a href="@($"categories/edit?id={category.Id}")">Edit</a>
+                            <a href="@($"categories/details?id={category.Id}")">Details</a>
+                            <a href="@($"categories/delete?id={category.Id}")">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        }
+    </div>
+</div>
 
 @code {
     private BlazorScaffoldingNoAuthContext context = default!;

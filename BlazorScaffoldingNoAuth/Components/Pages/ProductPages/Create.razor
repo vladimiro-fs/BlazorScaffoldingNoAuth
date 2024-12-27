@@ -35,11 +35,21 @@
                 <InputNumber id="price" @bind-Value="Product.Price" class="form-control" /> 
                 <ValidationMessage For="() => Product.Price" class="text-danger" /> 
             </div>        
-            <div class="mb-3">
+            @* <div class="mb-3">
                 <label for="categoryid" class="form-label">CategoryId:</label> 
                 <InputNumber id="categoryid" @bind-Value="Product.CategoryId" class="form-control" /> 
                 <ValidationMessage For="() => Product.CategoryId" class="text-danger" /> 
-            </div>        
+            </div> *@
+            <div class="mb-3">
+                <label for="categoryid" class="form-label">Category:</label>
+                <select id="categoryid" class="form-control" @bind="Product.CategoryId">
+                    @foreach (var category in Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <ValidationMessage For="() => Product.CategoryId" class="text-danger" />
+            </div>
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>
@@ -53,7 +63,16 @@
     [SupplyParameterFromForm]
     private Product Product { get; set; } = new();
 
+    public List<Category> Categories { get; set; } = new List<Category>();
+
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Categories = await context.Category.ToListAsync();    
+    }  
+
     private async Task AddProduct()
     {
         using var context = DbFactory.CreateDbContext();
